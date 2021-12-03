@@ -12,17 +12,29 @@ public class Item {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
-
-	@JsonBackReference
-	@ManyToOne(targetEntity=Cart.class, fetch = FetchType.LAZY)
-	@JoinColumn(name="cart_id", nullable=false)//Optional
-    private Cart cart;
 	
 	private float discount;
 	
 	private float sellValue;  // product value - discount
+
+	@JsonBackReference
+	@ManyToOne(targetEntity=Cart.class, fetch = FetchType.LAZY) 
+	@JoinColumn(name="cart_id", nullable=false) 
+    private Cart cart;
+	
+	@OneToOne(targetEntity=Product.class) // No cascade because products can exists without items
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable=true) // not null if an item must have a product linked
+    private Product product;
 	
 	
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
 	public Cart getCart() {
 		return cart;
 	}
