@@ -1,10 +1,15 @@
 package com.passersbyte.naturally.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +47,19 @@ public class UserController {
 	return userRepository.findAll();
 	}
 	
+	@GetMapping("/{id}")
+	  public ResponseEntity<User> getTutorialById(@PathVariable("id") Integer id) {
+	    Optional<User> userData = userRepository.findById(id);
+
+	    if (userData.isPresent()) {
+	      return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+	    } else {
+	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	    
+	  }
+
+	
 	@GetMapping("/greeting")
 	public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
 		model.addAttribute("name", name);
@@ -53,5 +71,6 @@ public class UserController {
 		model.addAttribute("users", userRepository.findAll());
 		return "greetings";
 	}
-
+	
+	
 }

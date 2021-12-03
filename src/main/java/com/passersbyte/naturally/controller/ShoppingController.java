@@ -25,6 +25,7 @@ public class ShoppingController {
 	// This returns a JSON or XML with the users
 		//ShoppingService s = new ShoppingService();
 		//s.setShoppingRepository(shoppingRepository);
+		//s.createCartWithNoItem();
 		//s.createCartWithItem();
 		//s.addCartItem();
 		//s.removeCartItem();
