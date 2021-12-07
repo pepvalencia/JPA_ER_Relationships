@@ -2,6 +2,7 @@ package com.passersbyte.naturally.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +32,12 @@ public class ShoppingController {
 		//s.removeCartItem();
 			
 	return shoppingRepository.findAll();
+	}
+	
+	@GetMapping("/carts")
+	public String greetings(Model model) {
+		model.addAttribute("carts", shoppingRepository.findAll());
+		return "carts";
 	}
 	
 	//buyProuduct -> inserts Item in cart for user

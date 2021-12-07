@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- if security declared for thymeleaf views replace with
+ <html xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+-->
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <!-- <p th:text="'Carts, ' + ${carts} + '!'" /> -->
+    <hr>
+    
+    <!-- if authentication
+    <h3 th:inline="text"> Welcome [[${#httpServletRequest.remoteUser}]]</h3>
+        
+    <form th:action="@{/logout}" method="post">
+      <input type="submit" value="Logout" />
+    </form > -->
+    <table>
+      <!-- authorization headers  for view/hide a column
+       <th sec:authorize= "hasRole('ROLE_ADMIN')"> Actions >/th>
+      -->
+     <tr th:each="e : ${carts}">
+      <!-- <td th:text="${e.name}" th:href="@{/demo/greeting(name=${e.name})}"></td> -->
+      <td th:text="${e.name}"></td>
+      <td th:text="${e.total}"></td>
+      
+      <!-- authorization rows  for view/hide a column
+       <td sec:authorize= "hasRole('ROLE_ADMIN')">
+        <a th:href="@{'/edit/'+ ${e.name}}"> Delete</a>
+        </td>
+      -->
+      
+      
+      <!-- <td><a href="greeting.html" th:href="@{/demo/greeting(name=${e.name})}">salute</a></td> -->
+     </tr>
+	</table>
+</body>
+</html>
