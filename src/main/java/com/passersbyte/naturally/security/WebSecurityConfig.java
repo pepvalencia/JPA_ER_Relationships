@@ -2,6 +2,7 @@ package com.passersbyte.naturally.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -55,8 +57,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // exceptionHandling().accessDeniedPage("/403")
              
     	
-    	 /*  if don't want authentication -> */
+    	 /* if don't want authentication -> */
     	http.authorizeRequests()
         .anyRequest().anonymous();
+    	
+    	/* only non private
+    	 * 
+    	 * .antMatchers(HttpMethod.POST, "/private").authenticated()
+			.anyRequest().permitAll();*/
+    	
+    	//jwt
+    	/*http.csrf().disable()
+		.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+		.authorizeRequests()
+		.antMatchers(HttpMethod.POST, "/user").permitAll()
+		.anyRequest().authenticated();*/
+
     }
 }

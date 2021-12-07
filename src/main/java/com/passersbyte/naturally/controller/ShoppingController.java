@@ -1,15 +1,21 @@
 package com.passersbyte.naturally.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.passersbyte.naturally.model.Cart;
 import com.passersbyte.naturally.model.Item;
+import com.passersbyte.naturally.model.User;
 import com.passersbyte.naturally.repository.ShoppingRepository;
 import com.passersbyte.naturally.service.ShoppingService;
 
@@ -39,6 +45,18 @@ public class ShoppingController {
 		model.addAttribute("carts", shoppingRepository.findAll());
 		return "carts";
 	}
+	
+	@GetMapping("cart/{id}")
+	  public ResponseEntity<Cart> getTutorialById(@PathVariable("id") Integer id) {
+	    Optional<Cart> cartData = shoppingRepository.findById(id);
+
+	    if (cartData.isPresent()) {
+	      return new ResponseEntity<>(cartData.get(), HttpStatus.OK);
+	    } else {
+	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	    
+	  }
 	
 	//buyProuduct -> inserts Item in cart for user
    
