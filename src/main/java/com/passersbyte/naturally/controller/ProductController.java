@@ -1,11 +1,15 @@
 package com.passersbyte.naturally.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +34,13 @@ public class ProductController {
 		// @RequestParam means it is a parameter from the GET or POST request
 	
 		Product n = new Product();
-		n.setName(name);
-		n.setValue(0);
+		n.setProductName(name);
+		n.setPrice(0f);
 		productRepository.save(n);
 		return "Saved";
 		}
 		
+		@CrossOrigin("http://localhost:4200")
 		@GetMapping(path="/all")
 		public @ResponseBody Iterable<Product> getAllProducts() {
 		// This returns a JSON or XML with the users
@@ -44,10 +49,28 @@ public class ProductController {
 		
 		@GetMapping("/topValue")
 		public String greetings(Model model) {
-			Pageable sortedByPriceDescNameAsc = 
-					  PageRequest.of(0, 5, Sort.by("total").descending().and(Sort.by("name")));
-			model.addAttribute("products", sortedByPriceDescNameAsc);
-			return "topValue";
+			/*Pageable sortedByPriceDescNameAsc = 
+					  PageRequest.of(0, 2, Sort.by("price").descending().and(Sort.by("productName")));
+			model.addAttribute("products", sortedByPriceDescNameAsc.getContent());*/
+			
+			Pageable paging = PageRequest.of(0, 2, Sort.by("price").ascending()); 
+			 
+			Page<Product> pagedResult = productRepository.findAll(paging);
+		
+			/*Pageable firstPageWithTwoElements = PageRequest.of(1, 2);
+			 
+			Page<Product> pagedResult = productRepository.findAll(firstPageWithTwoElements);*/
+			
+			model.addAttribute("products", pagedResult.getContent());
+			
+
+			return "products";
+		}
+		
+		@GetMapping("/productlist")
+		public String products(Model model) {
+			model.addAttribute("products", productRepository.findAll());
+			return "products";
 		}
 
 
