@@ -1,5 +1,6 @@
 package com.passersbyte.naturally.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,21 @@ public class ProductController {
 	private ProductRepository productRepository;
 	
 	@PostMapping(path="/add") // Map ONLY POST Requests
-	public @ResponseBody String addNewUser (@RequestParam String name
-	 , @RequestParam String email) {
+	public @ResponseBody String addNewProduct (@RequestParam String name
+	 , @RequestParam String code, @RequestParam String description) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
 	
 		Product n = new Product();
 		n.setProductName(name);
 		n.setPrice(0f);
+		
+		n.setDescription(description);
+		n.setProductCode(code);
+		n.setReleaseDate(null);
+		n.setStarRating(3.0f);
+		n.setImageUrl(null);
+		
 		productRepository.save(n);
 		return "Saved";
 		}
@@ -72,6 +80,12 @@ public class ProductController {
 			model.addAttribute("products", productRepository.findAll());
 			return "products";
 		}
+		
+		@GetMapping("/formnewproduct")
+		public String formnewproduct(Model model) {
+			return "formnewproduct";
+		}
+
 
 
 }

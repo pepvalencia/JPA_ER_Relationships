@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -42,6 +43,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+    	
+    	// permitir cualquier post sin seguridad
+    	http.
+        csrf().disable().
+        sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+        and().
+        authorizeRequests().
+        //antMatchers(HttpMethod.GET, "/rest/v1/session/login").permitAll().
+//        antMatchers(HttpMethod.POST, "/rest/v1/session/register").permitAll().
+//        antMatchers(HttpMethod.GET, "/rest/v1/session/logout").authenticated().
+//        antMatchers(HttpMethod.GET, "/rest/v1/**").hasAuthority("ADMIN").
+//        antMatchers(HttpMethod.POST, "/rest/v1/**").hasAuthority("USER").
+//        antMatchers(HttpMethod.PATCH, "/rest/v1/**").hasAuthority("USER").
+//        antMatchers(HttpMethod.DELETE, "/rest/v1/**").hasAuthority("USER").
+        anyRequest().permitAll();
              
          /*  if want authentication ->
           
@@ -57,9 +73,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // exceptionHandling().accessDeniedPage("/403")
              
     	
-    	 /* if don't want authentication -> */
+    	 /* if don't want authentication -> 
     	http.authorizeRequests()
-        .anyRequest().anonymous();
+        .anyRequest().anonymous();*/
     	
     	/* only non private
     	 * 
